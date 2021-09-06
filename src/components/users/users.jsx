@@ -5,7 +5,7 @@ export function Users() {
   return (
     <div>
       {users.map((user) => (
-        <UserItem key={user.id} user />
+        <UserItem key={user.id} user={user} />
       ))}
     </div>
   );
