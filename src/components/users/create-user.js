@@ -5,7 +5,7 @@ export default function CreateUser(props) {
   const {
     register,
     handleSubmit,
-    watch,
+    // watch,
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => console.log(data);
