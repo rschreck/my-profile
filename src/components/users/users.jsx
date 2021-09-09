@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment } from "react";
 import { users } from "./user-list";
 import { UserItem } from "./user-item";
 //import ContactContext from "../../context/contact/contact-context";
