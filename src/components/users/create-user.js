@@ -4,9 +4,17 @@ import { useLocalStorageState } from "../../hooks/use-location";
 
 export default function CreateUser(props) {
   const { type = "User" } = props;
-  const [myprofile, setMyProfile] = useLocalStorageState("myprofile", {});
+  const [myprofile, setMyProfile] = useLocalStorageState("myprofile", {
+    myprofile: {},
+  });
   const [skills, setSkills] = useLocalStorageState("skills", [{ name: "" }]);
-  const { firstName, skill, phone, Type, email } = myprofile?.myprofile;
+  const {
+    firstName = "",
+    skill = "",
+    phone = "",
+    Type = "",
+    email = "",
+  } = myprofile?.myprofile;
   const {
     register,
     control,
