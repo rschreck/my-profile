@@ -12,6 +12,7 @@ export function Navbar({ title = "My default", icon = "fas fa-user" }) {
         <li>
           <Link to="/create-user">Create User</Link>
         </li>
+
         <li>
           <Link to="/">Home</Link>
         </li>

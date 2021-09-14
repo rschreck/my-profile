@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+
 function UserItem({
   user = {
     avatar_url: "https://avatars.githubusercontent.com/u/44672855?v=4",
@@ -15,6 +16,7 @@ function UserItem({
     type = "User",
     followers_url = "https://github.com/rschreck/followers",
   } = user;
+
   return (
     <div className="card bg-light">
       <h3 className="text-primary text-left">
