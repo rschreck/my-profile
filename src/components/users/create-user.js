@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { useLocalStorageState } from "../../hooks/use-location";
-
+import ContactContext from "../../context/contact/contact-context";
 export default function CreateUser(props) {
-  const { type = "User" } = props;
+  const contactContext = useContext(ContactContext);
+  const { addContact } = contactContext;
+  //const { type = "User" } = props;
   const [myprofile, setMyProfile] = useLocalStorageState("myprofile", {
     myprofile: {},
   });
@@ -14,6 +16,8 @@ export default function CreateUser(props) {
     phone = "",
     Type = "",
     email = "",
+    gender = "",
+    openforwork = "no",
   } = myprofile?.myprofile;
   const {
     register,
@@ -50,83 +54,105 @@ export default function CreateUser(props) {
     setValue("myprofile.phone", phone, {
       shouldDirty: true,
     });
+    setValue("myprofile.gender", gender, {
+      shouldDirty: true,
+    });
+    setValue("myprofile.openforwork", openforwork, {
+      shouldDirty: true,
+    });
+
     setValue("skills", skills);
     // eslint-disable-next-line
   }, []);
   const onSubmit = (data) => {
     setMyProfile({ myprofile: data?.myprofile });
     setSkills(data.skills);
+    addContact(data);
   };
 
   return (
     <form className="text-primary" onSubmit={handleSubmit(onSubmit)}>
       <h2>Add Profile</h2>
+      <div className="grid-3">
+        <div className="form-group col-5">
+          <label>
+            {" "}
+            Name:
+            <input {...register("myprofile.firstName", { required: true })} />
+            {errors?.myprofile?.firstName?.type === "required" &&
+              "Name is required"}
+          </label>
+        </div>
 
-      <div className="form-group col-5">
-        <label>
-          {" "}
-          Name:
-          <input {...register("myprofile.firstName", { required: true })} />
-        </label>
-      </div>
-      <div className="form-group col-5">
-        <input {...register("myprofile.skill")} placeholder="Skill" />
-        {controlledFields.map((field, index) => {
-          return (
-            <input
-              {...register(`skills.${index}.name`)}
-              key={`skills.${index}.name`}
-            />
-          );
-        })}
+        <div className="form-group col-5">
+          <label>
+            {" "}
+            Email:
+            <input {...register("myprofile.email", { required: true })} />
+            {errors?.myprofile?.email?.type === "required" &&
+              "email  is required"}
+          </label>
 
-        <button
-          type="button"
-          onClick={() =>
-            append({
-              name: "skill",
-            })
-          }
-        >
-          Append
-        </button>
+          <div className="form-group col-5">
+            <label>
+              {" "}
+              Phone:
+              <input {...register("myprofile.phone", { required: true })} />
+              {errors?.myprofile?.phone?.type === "required" &&
+                "phone  is required"}
+            </label>
+          </div>
+        </div>
+        <div className="form-group col-5">
+          <label>
+            {" "}
+            Gender:
+            <select {...register("myprofile.gender")}>
+              <option value="female">female</option>
+              <option value="male">male</option>
+              <option value="other">other</option>
+            </select>
+          </label>
+        </div>
+        <div className="form-group col-5">
+          <label>
+            {" "}
+            Skills:
+            <input {...register("myprofile.skill")} placeholder="Skill" />
+          </label>
+          {controlledFields.map((field, index) => {
+            return (
+              <input
+                {...register(`skills.${index}.name`)}
+                key={`skills.${index}.name`}
+              />
+            );
+          })}
+
+          <button
+            type="button"
+            onClick={() =>
+              append({
+                name: "skill",
+              })
+            }
+          >
+            Append
+          </button>
+        </div>
+
+        <div className="form-group col-5">
+          <label>
+            {" "}
+            Open for work:
+            <select {...register("myprofile.openforwork")}>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </label>
+        </div>
       </div>
-      <div className="form-group col-5">
-        <label>
-          {" "}
-          Email:
-          <input {...register("myprofile.email", { required: true })} />
-          {errors?.myprofile?.email?.type === "required" &&
-            "email  is required"}
-        </label>
-        <label>
-          {" "}
-          Phone:
-          <input {...register("myprofile.phone", { required: false })} />
-        </label>
-        {errors.myprofile?.phone?.type === "required" && "phone  is required"}
-        <label>
-          {" "}
-          User Type:
-          <input
-            type="radio"
-            checked={type === "User"}
-            defaultValue={type}
-            {...register("myprofile.Type", { required: false })}
-          />
-          Personal
-        </label>
-        <label>
-          {" "}
-          Gender:
-          <select {...register("myprofile.gender")}>
-            <option value="female">female</option>
-            <option value="male">male</option>
-            <option value="other">other</option>
-          </select>
-        </label>
-      </div>
-      <input type="submit" value="Add" className="btn btn-primary btn-block" />
+      <input type="submit" value="Save" className="btn btn-primary btn-block" />
     </form>
   );
 }
